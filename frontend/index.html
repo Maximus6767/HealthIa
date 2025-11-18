@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"
+        <title>
+    </title>
+</head>
+
+<body>
+    <div class="container flex">
+        <h1>Contate-nos</h1>
+        <label for="nome_completo">Nome Completo:</label>
+        <br>
+        <input type="text" id="nome_completo" placeholder="Ciclano da Silva Fonseca" class="form-control form-floating mb-3">
+
+        <label for="email">E-mail:</label>
+        <br>
+        <input type="email" id="email" placeholder="email@example.com" class="form-control form-floating mb-3">
+        
+
+        <div class="form-floating">
+            <select class="form-select" id="lista_instituicoes" aria-label="Floating label select example">
+                <option selected disabled>Escolha qual instituição você deseja entrar em contato</option>
+                <option value="415">Instituição Health I.A Brasil</option>
+                <option value="333">Instituição Health I.A Guatemala</option>
+                <option value="516">Instituição Health I.A País de Gales </option>
+            </select>
+            <br>
+            <label for="lista_instituicoes">Selecione uma instuição</label>
+        </div>
+
+
+        <label for="assunto">Assunto:</label>
+        <br>
+        <input type="text" id="assunto" placeholder="Fale sobre o que gostaria de falar" class="form-control form-floating mb-3">
+
+        <label for="mensagem">Mensagem</label>
+        <br>
+        <input type="text" id="mensagem" placeholder="Escreva sua mensagem referente ao seu problema!" class="form-control form-floating mb-3">
+
+        <button id="btn_enviar" class="btn btn-success btn-lg">Enviar</button>
+
+
+    </div>
+
+
+</body>
+
+
+<script>
+    // Criando o evento quando clica no enviar
+    document.getElementById("btn_enviar").addEventListener("click", async ()=>{
+        //pegando os valores dos inputs
+        const nome_completo = document.getElementById("nome_completo").value
+        const email = document.getElementById("email").value
+
+        const instituicao = document.getElementById("lista_instituicoes")
+        let opcao = instituicao.options[instituicao.selectedIndex].value
+        const assunto = document.getElementById("assunto").value
+        const mensagem = document.getElementById("mensagem").value
+
+        //Fazer a req para o backend
+        const resposta = await fetch(`http://localhost:3000/contate_nos`,{
+
+        })
+
+        
+    })
+
+
+
+
+
+
+
+
+
+</script>
+
+</html>
