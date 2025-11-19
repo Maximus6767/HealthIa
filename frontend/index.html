@@ -15,70 +15,123 @@
         <h1>Contate-nos</h1>
         <label for="nome_completo">Nome Completo:</label>
         <br>
-        <input type="text" id="nome_completo" placeholder="Ciclano da Silva Fonseca" class="form-control form-floating mb-3">
+        <input type="text" id="nome_completo" placeholder="Ciclano da Silva Fonseca"
+            class="form-control form-floating mb-3">
 
         <label for="email">E-mail:</label>
         <br>
         <input type="email" id="email" placeholder="email@example.com" class="form-control form-floating mb-3">
-        
 
         <div class="form-floating">
             <select class="form-select" id="lista_instituicoes" aria-label="Floating label select example">
-                <option selected disabled>Escolha qual instituição você deseja entrar em contato</option>
-                <option value="415">Instituição Health I.A Brasil</option>
-                <option value="333">Instituição Health I.A Guatemala</option>
-                <option value="516">Instituição Health I.A País de Gales </option>
+                <!-- <option selected disabled>Escolha qual instituição você deseja entrar em contato</option> -->
+                <!-- <option value="415">Instituição Health I.A Brasil</option> -->
+                <!-- <option value="333">Instituição Health I.A Guatemala</option> -->
+                <!-- <option value="516">Instituição Health I.A País de Gales </option> -->
             </select>
             <br>
             <label for="lista_instituicoes">Selecione uma instuição</label>
         </div>
 
-
         <label for="assunto">Assunto:</label>
         <br>
-        <input type="text" id="assunto" placeholder="Fale sobre o que gostaria de falar" class="form-control form-floating mb-3">
+        <input type="text" id="assunto" placeholder="Fale sobre o que gostaria de falar"
+            class="form-control form-floating mb-3">
 
         <label for="mensagem">Mensagem</label>
         <br>
-        <input type="text" id="mensagem" placeholder="Escreva sua mensagem referente ao seu problema!" class="form-control form-floating mb-3">
+        <input type="text" id="mensagem" placeholder="Escreva sua mensagem referente ao seu problema!"
+            class="form-control form-floating mb-3">
 
         <button id="btn_enviar" class="btn btn-success btn-lg">Enviar</button>
 
+        <div id="feedback" class="mt-3"></div>
 
     </div>
 
-
 </body>
 
-
 <script>
+
+    //Configurando meu select com o banco
+    const configurando_select = async () => {
+        try {
+            let resposta = await fetch("http://localhost:3000/instituicoes");
+            const instituicoes = await resposta.json();
+
+            const select = document.getElementById("lista_instituicoes");
+            select.innerHTML = `<option value="">Escolha uma de nossas instituições</option>`;
+
+            instituicoes.forEach(inst => {
+                const option = document.createElement("option");
+                option.value = inst.cod_instituicao;
+                option.textContent = inst.nome_instituicao;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.log(`O erro foi: ${error}`);
+        }
+    }
+    configurando_select();
+
     // Criando o evento quando clica no enviar
-    document.getElementById("btn_enviar").addEventListener("click", async ()=>{
+    document.getElementById("btn_enviar").addEventListener("click", async () => {
         //pegando os valores dos inputs
-        const nome_completo = document.getElementById("nome_completo").value
-        const email = document.getElementById("email").value
+        const nome = document.getElementById("nome_completo").value;
+        const email = document.getElementById("email").value;
 
-        const instituicao = document.getElementById("lista_instituicoes")
-        let opcao = instituicao.options[instituicao.selectedIndex].value
-        const assunto = document.getElementById("assunto").value
-        const mensagem = document.getElementById("mensagem").value
+        const instituicao = document.getElementById("lista_instituicoes");
+        let codigo_instituicao = instituicao.options[instituicao.selectedIndex].value;
+        const assunto = document.getElementById("assunto").value;
+        const mensagem = document.getElementById("mensagem").value;
 
-        //Fazer a req para o backend
-        const resposta = await fetch(`http://localhost:3000/contate_nos`,{
+        //Fazendo a req para meu backend
+        try {
+            resposta = await fetch("http://localhost:3000/contate_nos", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nome,
+                    email,
+                    codigo_instituicao,
+                    assunto,
+                    mensagem
+                })
+            });
 
-        })
+            const dados = await resposta.json();
 
-        
-    })
+        const feedback = document.getElementById("feedback");
+        feedback.innerHTML = ""; // limpa card anterior
 
+        // SE O BACK RETORNAR STATUS DE ERRO:
+        if (!resposta.ok || dados.resposta?.toLowerCase().includes("erro") || dados.resposta?.toLowerCase().includes("insira") || dados.resposta?.toLowerCase().includes("deve")) {
+            feedback.innerHTML = `
+                <div class="alert alert-danger" role="alert">
+                    ${dados.resposta}
+                </div>
+            `;
+            return;
+        }
 
-
-
-
-
-
-
-
+        // SUCESSO
+        feedback.innerHTML = `
+            <div class="alert alert-success" role="alert">
+                ${dados.resposta}
+            </div>
+        `;
+        }catch(error){
+            console.log(error)
+            const feedback = document.getElementById("feedback");
+        feedback.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                Erro ao se conectar com o servidor.
+            </div>
+        `;
+        }
+    });
 </script>
 
 </html>
