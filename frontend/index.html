@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"
-        <title>
-    </title>
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>Contate-nos123</title>
 </head>
-
+    
 <body>
-    <div class="container flex">
+    <div class="container flex cor">
         <h1>Contate-nos</h1>
         <label for="nome_completo">Nome Completo:</label>
         <br>
@@ -40,8 +40,8 @@
 
         <label for="mensagem">Mensagem</label>
         <br>
-        <input type="text" id="mensagem" placeholder="Escreva sua mensagem referente ao seu problema!"
-            class="form-control form-floating mb-3">
+        <textarea type="text" id="mensagem" placeholder="Escreva sua mensagem referente ao seu problema!"
+            class="form-control form-floating mb-3"></textarea>
 
         <button id="btn_enviar" class="btn btn-success btn-lg">Enviar</button>
 
@@ -103,29 +103,29 @@
 
             const dados = await resposta.json();
 
-        const feedback = document.getElementById("feedback");
-        feedback.innerHTML = ""; // limpa card anterior
+            const feedback = document.getElementById("feedback");
+            feedback.innerHTML = ""; // limpa o meu card anterior
 
-        // SE O BACK RETORNAR STATUS DE ERRO:
-        if (!resposta.ok || dados.resposta?.toLowerCase().includes("erro") || dados.resposta?.toLowerCase().includes("insira") || dados.resposta?.toLowerCase().includes("deve")) {
-            feedback.innerHTML = `
+            // Se der algum erro no meu backend
+            if (!resposta.ok || dados.resposta?.toLowerCase().includes("erro") || dados.resposta?.toLowerCase().includes("insira") || dados.resposta?.toLowerCase().includes("deve")) {
+                feedback.innerHTML = `
                 <div class="alert alert-danger" role="alert">
                     ${dados.resposta}
                 </div>
             `;
-            return;
-        }
+                return;
+            }
 
-        // SUCESSO
-        feedback.innerHTML = `
+            // Sucesso
+            feedback.innerHTML = `
             <div class="alert alert-success" role="alert">
                 ${dados.resposta}
             </div>
         `;
-        }catch(error){
+        } catch (error) {
             console.log(error)
             const feedback = document.getElementById("feedback");
-        feedback.innerHTML = `
+            feedback.innerHTML = `
             <div class="alert alert-danger" role="alert">
                 Erro ao se conectar com o servidor.
             </div>
