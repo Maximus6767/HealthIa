@@ -1,0 +1,2 @@
+#Arquivos que o git vai ignorar e não vai subir
+backend/node_modules
