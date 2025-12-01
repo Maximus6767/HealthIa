@@ -9,29 +9,59 @@
 </head>
 <body>
   <div class="container">
+
     <div class="login-container">
+
       <img src="img/Health-IA.png" alt="Health-IA Logo" class="logo">
       <h1 class="title">Cadastro</h1>
+
       <form action="#" method="POST" class="form">
+
         <div class="input-group">
-          <label for="name">Nome Completo</label>
-          <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
+          <label for="nome_completo">Nome Completo</label>
+          <input type="text" id="nome_completo" name="nome_completo" required placeholder="Digite seu nome completo">
         </div>
+
         <div class="input-group">
           <label for="email">E-mail Corporativo</label>
           <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
         </div>
+
         <div class="input-group">
-          <label for="dob">Data de Nascimento</label>
-          <input type="date" id="dob" name="dob" required>
+          <label for="dt_nasc">Data de Nascimento</label>
+          <input type="date" id="dt_nasc" name="dt_nasc" required>
         </div>
+
         <div class="input-group">
-          <label for="password">Senha</label>
-          <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" required placeholder="Digite sua senha">
         </div>
+
         <button type="submit" class="btn">Cadastrar</button>
       </form>
     </div>
   </div>
 </body>
+
+<script>
+  //Criando evento ao clicar no botão de Cadastrar-se
+  document.getElementById("btn").addEventListener("click", async ()=>{
+    //Pegando os dados que foram armazenados nos meus inputs
+    const nome_completo = document.getElementById("nome_completo").value;
+    const email = document.getElementById("email").value;
+    const dt_nasc = document.getElementById("dt_nasc").value;
+    const senha = document.getElementById("senha").value;
+
+    //Req para o backend
+
+
+
+
+
+  })
+
+</script>
+
+
+
 </html>
