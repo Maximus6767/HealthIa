@@ -85,7 +85,7 @@ app.post("/cadastro", async (req,res)=>{
         const [resultado2] = await conexao.query(sql,[userTrim, emailTrim, dt_nascTrim, senhaHash ]);
         if (resultado2.affectedRows == 1) {
             return res.json({
-                "reposta":"Cadastro feito com sucesso!"
+                "resposta":"Cadastro feito com sucesso!"
             });
         }else{
             return res.json({
@@ -94,5 +94,29 @@ app.post("/cadastro", async (req,res)=>{
         }
     }catch(error){
         console.log(error)
+    }
+})
+app.post("/login", async (req, res) => {
+    try {
+        const { email } = req.body;
+        const { senha } = req.body;
+
+        const emailTrim= email?.trim();
+        const senhaTrim= senha?.trim();
+
+        // Pegando o salt + hash para a verificação da senha
+        const senhaHash = await bcrypt.hash(senhaTrim,saltRounds);
+
+        const sql = `SELECT * FROM cadastros WHERE email=? AND senha=?`
+        const [resultado] = await conexao.query(sql, [emailTrim, senhaHash])
+
+        if (resultado.length == 1) {
+            return res.send('Login feito!')
+        } else {
+            return res.send('Login ou senha incorretos!')
+        }
+
+    } catch (error) {
+        console.log(`O erro foi ${error}`)
     }
 })
