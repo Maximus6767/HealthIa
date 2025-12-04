@@ -98,25 +98,34 @@ app.post("/cadastro", async (req,res)=>{
 })
 app.post("/login", async (req, res) => {
     try {
-        const { email } = req.body;
-        const { senha } = req.body;
+        const { email, senha } = req.body;
 
         const emailTrim= email?.trim();
         const senhaTrim= senha?.trim();
 
-        // Pegando o salt + hash para a verificação da senha
-        const senhaHash = await bcrypt.hash(senhaTrim,saltRounds);
+        //Select para fazer a verificação do meu cadastro, para fazer login
+        const sql = `SELECT * FROM cadastros WHERE email=?`;
+        const [resultado] = await conexao.query(sql, [emailTrim]);
 
-        const sql = `SELECT * FROM cadastros WHERE email=? AND senha=?`
-        const [resultado] = await conexao.query(sql, [emailTrim, senhaHash])
+        if (resultado.length == 0) {
+            return res.send('Email não cadastrado')
+        }
+        
+        const hasdoBanco = resultado[0].senha;
 
-        if (resultado.length == 1) {
-            return res.send('Login feito!')
+        const senhaValidada = await bcrypt.compare(senhaTrim, hasdoBanco);
+
+        if (senhaValidada) {
+            return res.json({
+                "resposta":"Login feito com sucesso"
+            })
         } else {
-            return res.send('Login ou senha incorretos!')
+            return res.json({
+                "resposta":"Seu email ou senha estão incorretos, tente novamente"
+            })
         }
 
     } catch (error) {
-        console.log(`O erro foi ${error}`)
+        console.log(`O erro foi ${error}`);
     }
-})
+});
